@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murat Shop</title>
+<link rel="icon" type="image/png" href="https://image2url.com/r2/default/images/1771103981374-125ce442-a9ab-4e51-a57e-29b0ff2e6e18.png">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    background-color: #1e1e2f;
+    color: #fff;
+  }
+
+  #overons {
+    margin-top: 40px;
+  }
+
+.top-buttons {
+  position: fixed;
+  top: 20px;
+  left: 50%; /* horizontaal centreren */
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  padding: 10px 20px; /* ruimte rondom knoppen */
+  background-color: rgba(50, 50, 70, 0.9); /* donkerblauwe transparante achtergrond */
+  border-radius: 15px; /* afgeronde hoeken */
+  box-shadow: 0 0 15px rgba(0,0,0,0.4); /* lichte schaduw */
+  z-index: 9999;
+}
+
+.top-buttons a {
+  background: #5865F2;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.top-buttons a:hover {
+  background: #4752c4;
+  transform: scale(1.05);
+}
+
+  /* Sidebar */
+.sidebar {
+  width: 200px; /* eerder 240px */
+  padding: 15px 15px; /* iets minder padding aan de zijkanten */
+  background: linear-gradient(180deg, #2e2e42, #1e1e2f);
+  height: 100vh;
+  position: fixed;
+  overflow-y: auto;
+  cursor: pointer;
+  border-right: 2px solid #5865F2;
+}
+.sidebar h2 {
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  color: #ffcc00;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar h2::before {
+  content: "⭐"; /* leuk icoon voor de headers */
+  font-size: 1.2em;
+}
+
+.pack-badge {
+  background: #ffcc00;
+  color: #1e1e2f;
+  font-size: 0.7em;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+  background-color: #5865F2;
+  transform: translateX(5px);
+  color: #fff;
+}
+
+  /* Main content */
+.main {
+  margin-left: 210px; /* eerder 240px + 10px extra speling */
+  padding: 30px;
+  flex: 1;
+}
+  /* Product card */
+  .product-card {
+    display: none; /* standaard niet zichtbaar */
+    background-color: #2e2e42;
+    border-radius: 10px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+  .product-card.active {
+    display: block;
+  }
+  .product-card h2 {
+    margin-top: 0;
+    color: #ffcc00;
+  }
+  .product-card .price {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .product-card ul {
+    margin: 0 0 10px 20px;
+  }
+  .product-card .description {
+    font-size: 0.9em;
+    line-height: 1.4em;
+  }
+  .product-card code {
+    background-color: #444466;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: #ffcc00;
+  }
+
+  /* Scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #5865F2;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #1e1e2f;
+}
+  html {
+    scroll-behavior: smooth;
+  }
+
+.home-button {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+
+  background: #5865F2;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 50px;
+
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  transition: 0.2s;
+  z-index: 9999;
+}
+
+.home-button:hover {
+  background: #4752c4;
+  transform: scale(1.05);
+}
+
+</style>
+</head>
+<body>
+
+<div class="top-buttons">
+  <a href="javascript:void(0)" onclick="goHome()">🏠 Home</a>
+  <a href="https://discord.gg/haWm2XT5Am" target="_blank">💬 Join Discord</a>
+</div>
+
+<div class="sidebar">
+  <h2>Commands</h2>
+  <a onclick="showProduct('aangenomen')">Aangenomen</a>
+  <a onclick="showProduct('clear')">Clear</a>
+  <a onclick="showProduct('deploy-Commands')">Deploy-Commands</a>
+  <a onclick="showProduct('index')">Index</a>
+  <a onclick="showProduct('handle-Commands')">Handle-Commands</a>
+  <a onclick="showProduct('handle-Events')">Handle-Events</a>
+  <a onclick="showProduct('ready')">Ready</a>
+  <a onclick="showProduct('interaction-Create')">InteractionCreate</a>
+  <a onclick="showProduct('ledenlijst')">Ledenlijst</a>
+  <a onclick="showProduct('ticketpanel')">Ticketpanel</a>
+  <a onclick="showProduct('addrole')">Addrole</a>
+  <a onclick="showProduct('removerol')">Removerol</a>
+  <a onclick="showProduct('avatar')">Avatar</a>
+  <a onclick="showProduct('ban')">Ban</a>
+  <a onclick="showProduct('unban')">Unban</a>
+  <a onclick="showProduct('blacklistlos')">Blacklist</a>
+  <a onclick="showProduct('blacklistlist')">Blacklistlist</a>
+  <a onclick="showProduct('blacklistcheck')">Blacklistcheck</a>
+  <a onclick="showProduct('mijnblacklist')">Mijnblacklist</a>
+  <a onclick="showProduct('bugmelden')">Bugmelden</a>
+  <a onclick="showProduct('ontsla')">Ontsla</a>
+  <a onclick="showProduct('ping')">Ping</a>
+  <a onclick="showProduct('poll')">Poll</a>
+  <a onclick="showProduct('say')">Say</a>
+  <a onclick="showProduct('warn')">Warn</a>
+  <a onclick="showProduct('userinfo')">Userinfo</a>
+  <a onclick="showProduct('serverinfo')">Serverinfo</a>
+  <a onclick="showProduct('kick')">Kick</a>
+  <a onclick="showProduct('help')">Help</a>
+  <a onclick="showProduct('clearuser')">Clearuser</a>
+
+  <h2>Packs</h2>
+  <a onclick="showProduct('Sources-Pack')">Sources-Pack</a>
+  <a onclick="showProduct('Utility-Pack')">Utility-Pack</a>
+  <a onclick="showProduct('Moderatie-Pack')">Moderatie-Pack</a>
+  <a onclick="showProduct('blacklist')">Blacklist Pack</a>
+  <a onclick="showProduct('WLP')">WLP</a>
+  <a onclick="showProduct('Warns-Pack')">Warns-Pack</a>
+</div>
+
+<div class="main">
+<h1></h1>
+<div id="products">
+
+<div class="product-card active" id="intro">
+  <h2>👋 Welkom bij de Murat Shop</h2>
+
+  <div class="description">
+    <p>
+      Deze website is bedoeld voor mensen die zelf een Discord bot willen bouwen,
+      maar geen zin hebben om alles helemaal zelf te programmeren.
+    </p>
+
+    <p>
+      Hier kun je losse commands kopen of complete packs met meerdere bestanden.
+      Elk product bevat kant-en-klare code die je alleen hoeft te hernoemen naar <code>.js</code>
+      en in je bot map te plaatsen.
+    </p>
+
+    <h3>📦 Hoe werkt het?</h3>
+    <ul>
+      <li>Klik links in de sidebar op een command of pack.</li>
+      <li>Lees wat het command doet en welke bestanden je krijgt.</li>
+      <li>Na aankoop ontvang je de bestanden per mail of Discord.</li>
+      <li>Hernoem <code>.txt</code> naar <code>.js</code>.</li>
+      <li>Plaats het bestand in de juiste map van je bot.</li>
+    </ul>
+
+    <h3>🧠 Wat heb je nodig?</h3>
+    <ul>
+      <li>Node.js geïnstalleerd</li>
+      <li>discord.js library</li>
+      <li>Basiskennis van mappen & bestanden</li>
+    </ul>
+
+    <h3>💡 Tip</h3>
+    <p>
+      Heb je het <b>SourcesPack</b>? Dan heb je direct een complete basis
+      om je bot te starten.
+    </p>
+
+    <p>
+      Klik links op een command om te beginnen 👈
+    </p>
+  </div>
+</div>
+
+<div class="product-card active" id="overons">
+  <h2>Over Ons</h2>
+
+  <div class="description">
+    <p>Wij bieden betaalbare en kant-en-klare Discord bot commands & packs voor Node.js bots.</p>  
+    <p>Onze producten zijn gemaakt voor developers die snel een professionele bot willen bouwen</p>
+    <p>zonder alles zelf te coderen.</p>
+
+    <br>Waarom Wij?<br>
+
+    <p>✔ Direct te gebruiken</p>
+    <p>✔ Duidelijke installatie</p>  
+    <p>✔ Snelle levering</p> 
+
+    <br>Murat Shop Team<br>
+
+  </div>
+</div>
+
+
+<div class="product-card" id="aangenomen">
+<h2>Aangenomen</h2>
+<div class="price">€0,75</div>
+<ul>
+<li>aangenomen.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Stuurt een bericht wanneer een gebruiker wordt aangenomen in de server.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>aangenomen.js</code> en plaats in de commands map.
+</div>
+</div>
+
+<div class="product-card" id="clear">
+<h2>Clear</h2>
+<div class="price">€0,49</div>
+<ul>
+<li>clear.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Verwijdert een opgegeven aantal berichten in een kanaal.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>clear.js</code> en plaats in de commands map.
+</div>
+</div>
+
+<div class="product-card" id="deploy-Commands">
+<h2>Deploy-Commands</h2>
+<div class="price">€1,40</div>
+<ul>
+<li>deploy-commands.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Registreert al je slash commands bij Discord.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>deploy-commands.js</code> en plaats in root map van je bot.
+</div>
+</div>
+
+<div class="product-card" id="index">
+<h2>Index</h2>
+<div class="price">€1,00</div>
+<ul>
+<li>index.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Hoofdbestand van je bot die alle modules en events laadt.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>index.js</code> en plaats in root van bot.
+</div>
+</div>
+
+<div class="product-card" id="handle-Commands">
+<h2>Handle-Commands</h2>
+<div class="price">€1,25</div>
+<ul>
+<li>handleCommands.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Behandelt het laden en uitvoeren van alle commands.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>handleCommands.js</code> en plaats in map.
+</div>
+</div>
+
+<div class="product-card" id="handle-Events">
+<h2>Handle-Events</h2>
+<div class="price">€1,00</div>
+<ul>
+<li>handleEvents.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Behandelt het laden van alle events zoals ready, interactionCreate, guildMemberAdd etc.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>handleEvents.js</code> en plaats in map.
+</div>
+</div>
+
+<div class="product-card" id="ready">
+<h2>Ready</h2>
+<div class="price">€0,25</div>
+<ul>
+<li>ready.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Event dat uitgevoerd wordt zodra de bot online komt.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>ready.js</code> en plaats in events map.
+</div>
+</div>
+
+<div class="product-card" id="interaction-Create">
+<h2>Interaction-Create</h2>
+<div class="price">€0,50</div>
+<ul>
+<li>interactionCreate.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Event dat reageert op alle slash command en button interactions.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>interactionCreate.js</code> en plaats in events map.
+</div>
+</div>
+
+<div class="product-card" id="ledenlijst">
+<h2>Ledenlijst</h2>
+<div class="price">€1,00</div>
+<ul>
+<li>ledenlijst.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Geeft een lijst van alle leden in de server.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>ledenlijst.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="ticketpanel">
+<h2>Ticketpanel</h2>
+<div class="price">€2,00</div>
+<ul>
+<li>ticketpanel.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Maakt een ticketpanel voor support tickets.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>ticketpanel.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="addrole">
+<h2>Addrole</h2>
+<div class="price">€0,50</div>
+<ul>
+<li>addrole.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Voegt een rol toe aan een gebruiker.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>addrole.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="avatar">
+<h2>Avatar</h2>
+<div class="price">€0,50</div>
+<ul>
+<li>avatar.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Laat de avatar van een gebruiker zien.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>avatar.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="ban">
+<h2>Ban</h2>
+<div class="price">€0,25</div>
+<ul>
+<li>ban.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Banned een gebruiker van de server.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>ban.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="removerol">
+<h2>Removerol</h2>
+<div class="price">€0,50</div>
+<ul><li>removerol.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Verwijdert een rol van een gebruiker op de server.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>removerol.js</code> en plaats in je commands map.
+</div>
+</div>
+
+<div class="product-card" id="unban">
+<h2>Unban</h2>
+<div class="price">€0,25</div>
+<ul><li>unban.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Haalt een eerder verbannen gebruiker terug in de server.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>unban.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="warns">
+<h2>Warns</h2>
+<div class="price">€0,50</div>
+<ul><li>warns.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Toont alle waarschuwingen van een gebruiker.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>warns.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="unwarn">
+<h2>Unwarn</h2>
+<div class="price">€0,50</div>
+<ul><li>unwarn.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Verwijdert een waarschuwing van een gebruiker.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>unwarn.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="plogs">
+<h2>Plogs</h2>
+<div class="price">€1,00</div>
+<ul><li>plogs.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Logt belangrijke gebeurtenissen in de server, zoals join/leave.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>plogs.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="pwelkom">
+<h2>Pwelkom</h2>
+<div class="price">€1,00</div>
+<ul><li>pwelkom.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Stuurt een welkom bericht naar nieuwe leden.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>pwelkom.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="clearuser">
+<h2>Clearuser</h2>
+<div class="price">€0,50</div>
+<ul><li>clearuser.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Verwijdert alle berichten van een opgegeven gebruiker in een kanaal.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>clearuser.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="ping">
+<h2>Ping</h2>
+<div class="price">€0,25</div>
+<ul><li>ping.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Laat de latency van de bot zien.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>ping.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="poll">
+<h2>Poll</h2>
+<div class="price">€0,50</div>
+<ul><li>poll.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Maakt een poll zodat gebruikers kunnen stemmen.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>poll.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="say">
+<h2>Say</h2>
+<div class="price">€0,50</div>
+<ul><li>say.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Laat de bot een bericht sturen dat jij opgeeft.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>say.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="warn">
+<h2>Warn</h2>
+<div class="price">€0,50</div>
+<ul><li>warn.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Geeft een waarschuwing aan een gebruiker.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>warn.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="userinfo">
+<h2>Userinfo</h2>
+<div class="price">€0,50</div>
+<ul><li>userinfo.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Toont informatie over een gebruiker, zoals join-datum, roles en ID.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>userinfo.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="serverinfo">
+<h2>Serverinfo</h2>
+<div class="price">€0,50</div>
+<ul><li>serverinfo.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Toont informatie over de server, zoals ledenaantal en creation date.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>serverinfo.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="ontsla">
+<h2>Ontsla</h2>
+<div class="price">€0,75</div>
+<ul><li>ontsla.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Ontslaat iemand en haalt de bij bij behorende rollen.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>ontsla.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="blacklistlos">
+<h2>Blacklist</h2>
+<div class="price">€0,63</div>
+<ul><li>blacklist.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Beheert het blacklist systeem.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>blacklist.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="blacklistlist">
+<h2>Blacklistlist</h2>
+<div class="price">€0,63</div>
+<ul><li>blacklistlist.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Toont de volledige blacklist.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>blacklistlist.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="blacklistcheck">
+<h2>BlacklistCheck</h2>
+<div class="price">€0,63</div>
+<ul><li>blacklistcheck.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Controleert of een gebruiker geblacklist is.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>blacklistcheck.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="mijnblacklist">
+<h2>MijnBlacklist</h2>
+<div class="price">€0,63</div>
+<ul><li>mijnblacklist.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Toont je eigen blacklist status.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>mijnblacklist.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="kick">
+<h2>Kick</h2>
+<div class="price">€0,50</div>
+<ul><li>kick.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Verwijdert een gebruiker uit de server.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>kick.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="help">
+<h2>Help</h2>
+<div class="price">€0,50</div>
+<ul><li>help.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Toont een lijst met alle commands van de bot.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>help.js</code>.
+</div>
+</div>
+
+<div class="product-card" id="bugmelden">
+<h2>BugMelden</h2>
+<div class="price">€0,50</div>
+<ul><li>bugmelden.txt</li></ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Stuurt een melding naar het team bij een gevonden bug.<br>
+<strong>Gebruik:</strong> Hernoem naar <code>bugmelden.js</code>.
+</div>
+</div>
+
+
+<div class="product-card" id="blacklist">
+<h2>Blacklist <span class="pack-badge">Pack</span></h2>
+<div class="price">€2,50</div>
+<ul>
+<li>blacklist.txt</li>
+<li>blacklistlist.txt</li>
+<li>blacklistcheck.txt</li>
+<li>mijnblacklist.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Beheert een blacklist systeem voor gebruikers.<br>
+Controleert of een gebruiker geblacklist is, toont lijsten en beheert entries.<br>
+<strong>Gebruik:</strong> Hernoem alle bestanden naar .js en plaats in bot map.
+</div>
+</div>
+
+<div class="product-card" id="Sources-Pack">
+<h2>SourcesPack <span class="pack-badge">Pack</span></h2>
+<div class="price">€4,50</div>
+<ul>
+<li>index.txt</li>
+<li>deploy-commands.txt</li>
+<li>handleCommands.txt</li>
+<li>handleEvents.txt</li>
+<li>ready.txt</li>
+<li>interactionCreate.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Pack met alle benodigde basisbestanden om een bot te laten draaien.<br>
+<strong>Gebruik:</strong> Hernoem alle bestanden naar .js en plaats in botmap.
+</div>
+</div>
+
+<div class="product-card" id="Moderatie-Pack">
+<h2>ModeratiePack <span class="pack-badge">Pack</span></h2>
+<div class="price">€5,00</div>
+<ul>
+<li>addrole.txt</li>
+<li>removerol.txt</li>
+<li>ban.txt</li>
+<li>unban.txt</li>
+<li>clear.txt</li>
+<li>clearuser.txt</li>
+<li>help.txt</li>
+<li>kick.txt</li>
+<li>say.txt</li>
+<li>userinfo.txt</li>
+<li>serverinfo.txt</li>
+<li>warn.txt</li>
+<li>warns.txt</li>
+<li>unwarn.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Pack met alle moderatie commands voor je bot.<br>
+<strong>Gebruik:</strong> Hernoem alle bestanden naar .js en plaats in commands/events map.
+</div>
+</div>
+
+<div class="product-card" id="Utility-Pack">
+<h2>UtilityPack <span class="pack-badge">Pack</span></h2>
+<div class="price">€3,50</div>
+<ul>
+<li>ledenlijst.txt</li>
+<li>aangenomen.txt</li>
+<li>ontsla.txt</li>
+<li>avatar.txt</li>
+<li>bugmelden.txt</li>
+<li>ping.txt</li>
+<li>poll.txt</li>
+<li>warn.txt</li>
+<li>warns.txt</li>
+<li>unwarn.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Pack met handige utility commands zoals ledenlijst, ping, avatar en meldingen.<br>
+<strong>Gebruik:</strong> Hernoem alle bestanden naar .js en plaats in bot map.
+</div>
+</div>
+
+<div class="product-card" id="WLP">
+<h2>WLP <span class="pack-badge">Pack</span></h2>
+<div class="price">€12,00</div>
+<ul>
+<li>plogs.txt</li>
+<li>pwelkom.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Welkom/log pack die welkom berichten en logs verzorgt.<br>
+<strong>Gebruik:</strong> Hernoem bestanden naar .js en plaats in bot map.
+</div>
+</div>
+
+<div class="product-card" id="Warns-Pack">
+<h2>WarnsPack <span class="pack-badge">Pack</span></h2>
+<div class="price">€12,00</div>
+<ul>
+<li>warn.txt</li>
+<li>warns.txt</li>
+<li>unwarn.txt</li>
+</ul>
+<div class="description">
+<strong>Wat het doet:</strong><br>
+Pack voor het beheren van waarschuwingen (warns) op je server.<br>
+<strong>Gebruik:</strong> Hernoem naar .js en plaats in bot map.
+</div>
+</div>
+
+
+  <!-- Je kunt hier alle andere commands & packs toevoegen op dezelfde manier -->
+
+<script>
+function showProduct(id) {
+  // Alle product cards verbergen
+  const cards = document.querySelectorAll('.product-card');
+  cards.forEach(card => card.classList.remove('active'));
+
+  // Alleen geselecteerde product tonen
+  const selected = document.getElementById(id);
+  if(selected) selected.classList.add('active');
+}
+
+// Home-knop functie
+function goHome() {
+  // Alle product cards verbergen
+  const cards = document.querySelectorAll('.product-card');
+  cards.forEach(card => card.classList.remove('active'));
+
+  // Intro en Over Ons zichtbaar maken
+  const intro = document.getElementById('intro');
+  const overons = document.getElementById('overons');
+  if(intro) intro.classList.add('active');
+  if(overons) overons.classList.add('active');
+
+  // Scroll naar boven
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
