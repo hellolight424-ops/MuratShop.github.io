@@ -286,10 +286,10 @@ mijnblacklist: {
     type: "pack",
     description: "Alles rondom waarschuwingen in één handig pakket."
   },
-    DiscordBanScript: {
-    emoji: "📌",
+    DiscordBan_SERVER_SCRIPT_: {
+    emoji: "💼",
     files: ["discord ban SCRIPT.txt","discordbanBot.txt","fxmanifest.lua.txt"],
-    prijs: 12,
+    prijs: 2,
     type: "pack",
     description: "Een ban script die werkt met discord commands voor een fivem server."
   }
